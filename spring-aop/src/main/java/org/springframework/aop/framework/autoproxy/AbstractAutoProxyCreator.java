@@ -92,6 +92,9 @@ import org.springframework.util.StringUtils;
  * @see DefaultAdvisorAutoProxyCreator
  */
 @SuppressWarnings("serial")
+/**
+ * aop的实现
+ */
 public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		implements SmartInstantiationAwareBeanPostProcessor, BeanFactoryAware {
 

@@ -106,6 +106,11 @@ public class ProxyFactory extends ProxyCreatorSupport {
 	 * (or {@code null} for the low-level proxy facility's default)
 	 * @return the proxy object
 	 */
+	/**
+	 * aop的具体实现 cglib和jdk
+	 * @param classLoader
+	 * @return
+	 */
 	public Object getProxy(@Nullable ClassLoader classLoader) {
 		return createAopProxy().getProxy(classLoader);
 	}

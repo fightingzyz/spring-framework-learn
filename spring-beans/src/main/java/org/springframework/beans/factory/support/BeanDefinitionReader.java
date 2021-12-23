@@ -37,6 +37,10 @@ import org.springframework.lang.Nullable;
  * @since 1.1
  * @see org.springframework.core.io.Resource
  */
+
+/**
+ * 定义规范，方便扩展（将Bean定义信息的配置文件解析成BeanDefinition对象，如xml格式、properties格式、yaml格式）
+ */
 public interface BeanDefinitionReader {
 
 	/**

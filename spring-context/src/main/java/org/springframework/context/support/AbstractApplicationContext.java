@@ -547,39 +547,78 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
 			// Prepare this context for refreshing.
+			/**
+			 * 前期准备工作
+			 * 1. 设置当前spring启动的时间
+			 * 2. 设置关闭和开启spring的标志位
+			 * 3. 获取当前环境Environment对象并设置环境对象里的属性值
+			 * 4. 设置监听器以及需要发布的事件的集合
+			 */
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+			/**
+			 * 创建容器对象：DefaultListableBeanFactory
+			 * 加载xml配置文件的属性到当前工厂，最重要的是BeanDefinition
+			 */
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			/**
+			 * 初始化BeanFactory
+			 */
 			prepareBeanFactory(beanFactory);
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
+				/**
+				 * 扩展
+				 */
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
 				// Invoke factory processors registered as beans in the context.
+				/**
+				 * 调用BeanFactoryPostProcessor 进行增强
+				 */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
+				/**
+				 * 实例化并注册BeanPostProcessor
+				 */
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
+				/**
+				 * 国际化操作
+				 */
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
+				/**
+				 * 初始化应用程序的事件广播器
+				 */
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
+				/**
+				 * 扩展
+				 */
 				onRefresh();
 
 				// Check for listener beans and register them.
+				/**
+				 * 注册监听器
+				 */
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
+				/**
+				 * 面试重点的方法
+				 *
+				 */
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
@@ -614,6 +653,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Prepare this context for refreshing, setting its startup date and
 	 * active flag as well as performing any initialization of property sources.
+	 */
+	/**
+	 * 1. 设置当前spring启动的时间
+	 * 2. 设置关闭和开启spring的标志位
+	 * 3. 获取当前环境对象并设置环境对象里的属性值
+	 * 4. 设置监听器以及需要发布的事件的集合
 	 */
 	protected void prepareRefresh() {
 		// Switch to active.
@@ -898,6 +943,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Register a default embedded value resolver if no BeanFactoryPostProcessor
 		// (such as a PropertySourcesPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
+		/**
+		 * 判断BeanFactory内置的值处理器
+		 */
 		if (!beanFactory.hasEmbeddedValueResolver()) {
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
@@ -915,6 +963,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.
+		/**
+		 * 实例化剩下的非懒加载的单例对象
+		 */
 		beanFactory.preInstantiateSingletons();
 	}
 
